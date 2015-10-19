@@ -1,0 +1,33 @@
+suricata:
+  image: jasonish/suricata:beta
+  volumes:
+    - /var/log/suricata
+  privileged: true
+  net: host
+
+  # To pass in the interface and other arguments.
+  #env_file: suricata.env
+  command: -i enp3s0 -k none
+
+elasticsearch:
+  image: elasticsearch:latest
+  volumes:
+    - ./data/elasticsearch:/usr/share/elasticsearch/data
+
+logstash:
+  image: logstash:latest
+  volumes:
+    - ./logstash:/config
+    - ./data/logstash:/var/tmp/logstash
+  volumes_from:
+    - suricata
+  links:
+    - elasticsearch
+  command: -f /config/logstash.conf
+
+kibana:
+  image: kibana:latest
+  ports:
+    - 5601:5601
+  links:
+    - elasticsearch
