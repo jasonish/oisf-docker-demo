@@ -7,7 +7,7 @@
     docker pull jasonish/suricata:beta
 
     docker run --name=suricata --net=host -v /var/log/suricata \
-	    -it jasonish/suricata:beta -v -i enp3s0
+	    -it jasonish/suricata:beta -v -i eth0
 
 ### Logstash
 
