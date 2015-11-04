@@ -6,19 +6,18 @@ suricata:
   net: host
 
   # To pass in the interface and other arguments.
-  #env_file: suricata.env
-  command: -i enp3s0 -k none
+  command: -i eth2 -k none
 
 elasticsearch:
   image: elasticsearch:latest
-  volumes:
-    - ./data/elasticsearch:/usr/share/elasticsearch/data
+  command: --network.host 0.0.0.0
+  # volumes:
+  #   - ./data/elasticsearch:/usr/share/elasticsearch/data
 
 logstash:
   image: logstash:latest
   volumes:
-    - ./logstash:/config
-    - ./data/logstash:/var/tmp/logstash
+    - ./config:/config
   volumes_from:
     - suricata
   links:
@@ -29,5 +28,12 @@ kibana:
   image: kibana:latest
   ports:
     - 5601:5601
+  links:
+    - elasticsearch
+
+evebox:
+  image: jasonish/evebox
+  ports:
+    - 5636:5636
   links:
     - elasticsearch

@@ -15,15 +15,15 @@
 
 	docker run --name elasticsearch \
 		-v $(pwd)/data/elasticsearch:/usr/share/elasticsearch/data \
-		-it elasticsearch
+		-it elasticsearch --network.host 0.0.0.0
 
 ### Logstash
 
     docker pull logstash
 
-	docker run --name logstash --volumes-from suricata --link elasticsearch \
-		-v $(pwd)/logstash:/config:rw \
-		-it logstash -f /config/logstash.conf
+	docker run --name logstash --volumes-from suricata \
+        --link elasticsearch -v $(pwd)/config:/config \
+	    logstash -f /config/logstash.conf
 
 ### Kibana
 
