@@ -6,7 +6,7 @@ suricata:
   net: host
 
   # To pass in the interface and other arguments.
-  command: -i eth2 -k none
+  command: -i eth0 -k none
 
 elasticsearch:
   image: elasticsearch:latest
